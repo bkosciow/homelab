@@ -1,0 +1,22 @@
+DOMAINS = [
+    {
+        "domain": "mydomain1.host.com",
+        "login": "ovh-login1",
+        "password": "ovh-pwd1",
+        "depends": "mydomain1.host.com"
+    },
+    {
+        "domain": "mydomain2.host.com",
+        "login": "ovh-login2",
+        "password": "ovh-pwd2",
+        "depends": None
+    },
+    {
+        "domain": "mydomain3.host.com",
+        "login": "ovh-login3",
+        "password": "ovh-pwd3",
+        "depends": "mydomain1.host.com"
+    },
+]
+
+DNS_SERVER = "@dns101.ovh.net"
