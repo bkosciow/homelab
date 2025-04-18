@@ -1,0 +1,58 @@
+services:
+  nextcloud:
+    build: .docker/nextcloud
+    container_name: nextcloud
+    restart: unless-stopped
+    networks: 
+      - cloud
+    depends_on:
+      - redis
+    ports:
+      - ${WEB_PORT}:80
+    volumes:
+      - ./html:/var/www/html
+      - ./custom_apps:/var/www/html/custom_apps
+      - ./config:/var/www/html/config
+      - ./data:/var/www/html/data
+    environment:
+      - PUID=${PUID}
+      - PGID=${PGID}
+      - TZ=${TZ}
+      - MYSQL_DATABASE=${MYSQL_DATABASE}
+      - MYSQL_USER=${MYSQL_USER}
+      - MYSQL_PASSWORD=${MYSQL_PASSWORD}
+      - MYSQL_HOST=${MYSQL_HOST}
+      - REDIS_HOST=redis
+    dns:
+      - ${DNS_SERVER}
+
+
+  redis:
+    image: redis:alpine
+    container_name: redis
+    restart: unless-stopped
+    networks: 
+      - cloud
+
+  collabora:
+    image: collabora/code
+    restart: unless-stopped
+    networks: 
+      - cloud
+    environment:
+      - PUID=${PUID}
+      - PGID=${PGID}
+      - TZ=${TZ}
+      - password=${COLLABORA_PASS}
+      - username=${COLLABORA_USER}
+      - domain=${COLLABORA_DOMAIN}
+    ports:
+      - ${COLLABORA_PORT}:9980
+    dns:
+      - ${DNS_SERVER}
+
+      
+networks:
+  cloud:
+    name: cloud
+    driver: bridge      
