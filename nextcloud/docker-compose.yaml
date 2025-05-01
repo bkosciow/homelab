@@ -13,7 +13,8 @@ services:
       - ./html:/var/www/html
       - ./custom_apps:/var/www/html/custom_apps
       - ./config:/var/www/html/config
-      - ./data:/var/www/html/data
+#      - ./data:/var/www/html/data
+      - /mnt/storage/nextcloud/data:/var/www/html/data
     environment:
       - PUID=${PUID}
       - PGID=${PGID}
@@ -25,7 +26,6 @@ services:
       - REDIS_HOST=redis
     dns:
       - ${DNS_SERVER}
-
 
   redis:
     image: redis:alpine
