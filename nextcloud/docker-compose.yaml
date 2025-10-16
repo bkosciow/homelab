@@ -9,12 +9,13 @@ services:
       - redis
     ports:
       - ${WEB_PORT}:80
+      - 7867:7867
     volumes:
       - ./html:/var/www/html
       - ./custom_apps:/var/www/html/custom_apps
       - ./config:/var/www/html/config
-#      - ./data:/var/www/html/data
       - /mnt/storage/nextcloud/data:/var/www/html/data
+      - ./supervisord:/var/log/supervisord
     environment:
       - PUID=${PUID}
       - PGID=${PGID}
@@ -24,8 +25,12 @@ services:
       - MYSQL_PASSWORD=${MYSQL_PASSWORD}
       - MYSQL_HOST=${MYSQL_HOST}
       - REDIS_HOST=redis
+      - PHP_MEMORY_LIMIT=4G
+      - PHP_UPLOAD_LIMIT=10G
+      - APACHE_BODY_LIMIT=0
     dns:
       - ${DNS_SERVER}
+
 
   redis:
     image: redis:alpine
@@ -51,7 +56,15 @@ services:
     dns:
       - ${DNS_SERVER}
 
-      
+  whiteboard:
+    image: ghcr.io/nextcloud-releases/whiteboard:release
+    ports:
+      - ${WHITEBOARD_PORT}:3002
+    environment:
+#      - NEXTCLOUD_URL=https://cloud.bkosciow.dev
+      - NEXTCLOUD_URL=http://nextcloud
+      - JWT_SECRET_KEY=zKJMxjz7foXXqYWaF3ovr62LB60t3i0g1
+
 networks:
   cloud:
     name: cloud
