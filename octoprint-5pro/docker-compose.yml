@@ -1,0 +1,17 @@
+services:
+  octoprint:
+    image: octoprint/octoprint
+    privileged: true
+    ports:
+      - ${WEB_PORT}:5000
+      - ${CAM_PORT}:8080
+#    devices:
+#      - /dev/ttyender5pro:/dev/ttyUSB8
+#      - /dev/v4l/by-id/usb-0471_USB_Video_Camera-video-index0:/dev/video10
+    volumes:
+      - /mnt/storage/octoprint/data:/octoprint
+    restart: unless-stopped
+#    environment:
+#      - ENABLE_MJPG_STREAMER=true
+#      - MJPG_STREAMER_INPUT=-n -r 640x480 -f 10
+#      - CAMERA_DEV=/dev/video10
