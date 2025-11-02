@@ -58,13 +58,42 @@ services:
 
   whiteboard:
     image: ghcr.io/nextcloud-releases/whiteboard:release
+    networks: 
+      - cloud
     ports:
       - ${WHITEBOARD_PORT}:3002
     environment:
-#      - NEXTCLOUD_URL=https://cloud.bkosciow.dev
       - NEXTCLOUD_URL=http://nextcloud
       - JWT_SECRET_KEY=zKJMxjz7foXXqYWaF3ovr62LB60t3i0g1
 
+  nextcloud-appapi-dsp:
+    image: ghcr.io/nextcloud/nextcloud-appapi-dsp:release
+    restart: unless-stopped
+    privileged: true
+    networks: 
+      - cloud
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock
+    environment:
+      - NC_HAPROXY_PASSWORD=${NC_HAPROXY_PASSWORD}
+
+  appapi-harp:
+    image: ghcr.io/nextcloud/nextcloud-appapi-harp:release
+    container_name: appapi-harp
+    hostname: appapi-harp
+    ports:
+      - ${HARP_PORT}:8780
+      - ${FRP_PORT}:8782
+    environment:
+      - HP_SHARED_KEY=${NC_HAPROXY_PASSWORD}
+      - NC_INSTANCE_URL=http://nextcloud
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock
+      - ./certs:/certs
+    restart: unless-stopped
+    networks: 
+      - cloud    
+      
 networks:
   cloud:
     name: cloud
