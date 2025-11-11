@@ -4,9 +4,9 @@
 # Capture the list of upgraded packages and flatpaks
 apt_upgrades=$(apt-get -s upgrade | grep '^Inst' | awk '{print $2}' | tr '[:upper:]' '[:lower:]' | sort | uniq)
 
-Url="https://cloud.bkosciow.dev/ocs/v2.php/apps/spreed/api/v1/chat/kubi5p4r"
+Url="https://nextcloud/ocs/v2.php/apps/spreed/api/v1/chat/kubi5p4r"
 User="MrBot"
-AccessToken="sfPBd-xwgbC-WRoqm-PLHHt-kZAGg"
+AccessToken="aa-bb-cc"
 
 
 if [[ -n "$apt_upgrades" ]]; then
